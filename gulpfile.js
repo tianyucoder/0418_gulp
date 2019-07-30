@@ -14,14 +14,22 @@ const rename = require('gulp-rename');
 const uglify = require('gulp-uglify')
 //引入gulp-less
 const less = require('gulp-less');
+//引入less-plugin-autoprefix
 const LessAutoprefix = require('less-plugin-autoprefix')
 const autoprefix = new LessAutoprefix({ browsers: ['last 2 versions'] });
+//引入gulp-concat
 const concat = require('gulp-concat');
+//引入gulp-cssmin
 const cssmin = require('gulp-cssmin');
+//引入gulp-htmlmin
 const htmlmin = require('gulp-htmlmin');
-// const imagemin = require('gulp-imagemin');
+//引入gulp-imagemin
+const imagemin = require('gulp-imagemin');
+//引入gulp-livereload
 const livereload = require('gulp-livereload');
+//引入gulp-connect
 const connect = require('gulp-connect');
+//引入opn
 const opn = require('opn');
 
 //语法检查
