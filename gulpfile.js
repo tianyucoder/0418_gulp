@@ -1,35 +1,58 @@
 //引入gulp
 let gulp = require('gulp');
+//引入gulp-jshint
+const jshint = require('gulp-jshint')
+//引入jshint-stylish
+const stylish = require('jshint-stylish');
+//引入gulp-babel
+const babel = require('gulp-babel');
+//引入gulp-browserify
+const browserify = require('gulp-browserify');
+//引入gulp-rename
+const rename = require('gulp-rename');
+//引入gulp-uglify
+const uglify = require('gulp-uglify')
 
-/*
-* 警告：Did you forget to signal async completion?
-*   解决办法：
-*     1.任务的回调函数中传递一个done参数，当任务全部处理完毕时，调用done。
-*     2.将任务的回调函数用async声明，所有任务语句用await。
-*     3.返回一个流（可读流）
-* */
-
-let {createReadStream} = require('fs')
-//定义你的任务
-/*gulp.task('haha',  function(done) {
-   console.log('------------------1------------------')
-   console.log('------------------1------------------')
-   console.log('------------------1------------------')
-  done()
-});*/
-
-/*gulp.task('haha', async function() {
-  await console.log('------------------1------------------')
-  await console.log('------------------1------------------')
-  await console.log('------------------1------------------')
-});*/
-
-gulp.task('haha', function() {
-  console.log('------------------1------------------')
-  console.log('------------------1------------------')
-  console.log('------------------1------------------')
-  return createReadStream('./package.json')
+//语法检查
+gulp.task('jshint', function() {
+  // 将你的任务的任务代码放在这
+  return gulp.src('./src/js/*.js')
+    .pipe(jshint({
+      esversion: 6
+    }))
+    .pipe(jshint.reporter(stylish));
 });
+
+//语法转换
+gulp.task('babel', () => {
+  return gulp.src('./src/js/*.js')
+    .pipe(babel({ //进行语法转换
+      presets: ['@babel/env']
+    }))
+    .pipe(gulp.dest('build/js'))//输出到指定目录
+});
+
+//模块化语法转换
+gulp.task('browserify', function() {
+  return gulp.src('./build/js/index.js')
+    .pipe(browserify())//将CommonJs语法转换为浏览器能识别的语法
+    .pipe(rename('built.js'))//为了防止冲突将文件重命名
+    .pipe(gulp.dest('build/js/'))//输出到指定位置
+});
+
+//压缩js
+gulp.task('uglify', function () {
+  return gulp.src('build/js/built.js')
+    .pipe(uglify())  //压缩js
+    .pipe(rename('dist.min.js'))
+    .pipe(gulp.dest('dist/js'))
+});
+
+
+//配置默认任务
+gulp.task('default', gulp.series('jshint', 'babel', 'browserify','uglify'))
+
+
 
 
 

@@ -4,7 +4,7 @@ function add(x, y) {
 }
 
 function mul(x, y) {
-  return x * y
+  return x * y;
 }
 
 // 统一暴露
